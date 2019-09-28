@@ -18,7 +18,7 @@ public class Game extends Canvas implements Runnable {
 	public static int width = 300;
 	public static int height = width / 16 * 9;
 	public static int scale = 3;
-	public static String title = "Rain";
+	public static String title = "JWick";
 
 	private Thread thread;
 	private JFrame frame;
@@ -63,6 +63,8 @@ public class Game extends Canvas implements Runnable {
 		double delta = 0;
 		int frames = 0; // FPS (Frames Per Second)
 		int updates = 0; // UPS (Updates Per Second)
+		boolean shouldRender = true;
+		requestFocus();
 		while (running) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / ns;
@@ -72,9 +74,15 @@ public class Game extends Canvas implements Runnable {
 				updates++;
 				delta--;
 			}
-			render();
-			frames++;
-
+			try {
+				Thread.sleep(3);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (shouldRender) {
+				render();
+				frames++;
+			}
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
 				System.out.println(updates + " ticks, " + frames + " fps");
