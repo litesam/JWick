@@ -14,6 +14,7 @@ import com.light.jwick.graphics.Screen;
 import com.light.jwick.input.Keyboard;
 import com.light.jwick.level.Level;
 import com.light.jwick.level.RandomLevel;
+import com.light.jwick.level.SpawnLevel;
 
 public class Game extends Canvas implements Runnable {
 	
@@ -43,7 +44,7 @@ public class Game extends Canvas implements Runnable {
 		screen = new Screen(width, height);
 		frame = new JFrame();
 		key = new Keyboard();
-		level = new RandomLevel(64, 64);
+		level = new SpawnLevel("/textures/level.png");
 		player = new Player(key);
 
 		addKeyListener(key);

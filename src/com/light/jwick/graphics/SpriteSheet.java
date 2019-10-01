@@ -30,5 +30,4 @@ public class SpriteSheet {
 			e.printStackTrace();
 		}
 	}
-
 }
