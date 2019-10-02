@@ -60,7 +60,6 @@ public class Player extends Mob {
 		}
 		if (dir == 1) sprite = Sprite.playerRight;
 		if (dir == 2) sprite = Sprite.playerBack;
-		if (dir == 3) sprite = Sprite.playerLeft;
 		screen.renderPlayer(x - 16, y - 16, sprite);
 //		screen.renderPlayer(xx + 16, yy, Sprite.player1);
 //		screen.renderPlayer(xx, yy + 16, Sprite.player2);
