@@ -10,6 +10,7 @@ public class Player extends Mob {
 	private Sprite sprite;
 	private short anim = 0;
 	private boolean walking = false;
+	private int flippy = 0;
 
 	public Player(Keyboard input) {
 		this.input = input;
@@ -34,10 +35,22 @@ public class Player extends Mob {
 //		if (input.right) x++;
 
 		// Creates a local variable to support updation which is then updated by the mob
-		if (input.up) ya--;
-		if (input.down) ya++;
-		if (input.left) xa--;
-		if (input.right) xa++;
+		if (input.up) {
+			ya--;
+			flippy = 0;
+		}
+		if (input.down) {
+			ya++;
+			flippy = 0;
+		}
+		if (input.left) {
+			xa--;
+			flippy = 1;
+		}
+		if (input.right) {
+			xa++;
+			flippy = 0;
+		}
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
 			walking = true;
@@ -48,19 +61,28 @@ public class Player extends Mob {
 	}
 
 	public void render(Screen screen) {
-		if (dir == 0) { 
+		if (dir == 0) {
 			sprite = Sprite.playerForward;
 			if (walking) {
-				if (anim % 20 > 10) {
-					sprite = Sprite.playerForward1;
-				} else {
-					sprite = Sprite.playerForward2;
-				}
+				if (anim % 20 > 10) sprite = Sprite.playerForward1;
+				else sprite = Sprite.playerForward2;
 			}
 		}
-		if (dir == 1) sprite = Sprite.playerRight;
-		if (dir == 2) sprite = Sprite.playerBack;
-		screen.renderPlayer(x - 16, y - 16, sprite);
+		if (dir == 1) {
+			sprite = Sprite.playerRight;
+			if (walking) {
+				if (anim % 20 > 10) sprite = Sprite.playerRight1;
+				else sprite = Sprite.playerRight2;
+			}
+		}
+		if (dir == 2) {
+			sprite = Sprite.playerBack;
+			if (walking) {
+				if (anim % 20 > 10 ) sprite = Sprite.playerBack1;
+				else sprite = Sprite.playerBack2;
+			}
+		}
+		screen.renderPlayer(x - 16, y - 16, flippy, sprite);
 //		screen.renderPlayer(xx + 16, yy, Sprite.player1);
 //		screen.renderPlayer(xx, yy + 16, Sprite.player2);
 //		screen.renderPlayer(xx + 16, yy + 16, Sprite.player3);
