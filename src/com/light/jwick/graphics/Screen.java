@@ -66,14 +66,15 @@ public class Screen {
 		yp -= yOffset;
 		for (int y = 0; y < 32; y++) {
 			int ya = y + yp;
-//			if (flippy == 1) ys = 31 - y;
+			int ys = y;
+//			if (flippy == 2) ys = 31 - y;
 			for (int x = 0; x < 32; x++) {
 				int xa = x + xp;
 				int xs = x;
 				if (flippy == 1) xs = 31 - x;
 				if (xa < -32 || xa >= width || ya < 0 || ya >= height) break;
 				if (xa < 0) xa = 0;
-				int col = sprite.pixels[xs + y * 32];
+				int col = sprite.pixels[xs + ys * 32];
 				if (col != 0xffff00ff) pixels[xa + ya * width] = col;
 			}
 		}
