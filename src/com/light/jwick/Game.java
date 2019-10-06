@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import com.light.jwick.entity.mob.Player;
 import com.light.jwick.graphics.Screen;
 import com.light.jwick.input.Keyboard;
+import com.light.jwick.input.Mouse;
 import com.light.jwick.level.Level;
 import com.light.jwick.level.TileCoordinate;
 
@@ -48,7 +49,10 @@ public class Game extends Canvas implements Runnable {
 		player = new Player(playerSpawn.x(), playerSpawn.y(), key);
 		player.init(level);
 
+		Mouse mouse = new Mouse();
 		addKeyListener(key);
+		addMouseListener(mouse);
+		addMouseMotionListener(mouse);
 	}
 
 	public synchronized void start() {
