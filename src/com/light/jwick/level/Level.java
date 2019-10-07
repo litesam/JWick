@@ -1,5 +1,9 @@
 package com.light.jwick.level;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.light.jwick.entity.Entity;
 import com.light.jwick.graphics.Screen;
 import com.light.jwick.level.tile.Tile;
 
@@ -9,6 +13,8 @@ public class Level {
 	protected int width, height;
 	protected int[] tilesInt;
 	protected int[] tiles;
+	
+	private List<Entity> entities = new ArrayList<Entity>();	// TODO: Major code change going on!!!!!
 	
 	public static Level spawn = new SpawnLevel("/levels/spawn.png");
 
@@ -31,6 +37,9 @@ public class Level {
 	}
 
 	public void update() {
+		for (int i = 0; i < entities.size(); i++) {
+			entities.get(i).update();
+		}
 	}
 
 	private void time() {
@@ -54,6 +63,14 @@ public class Level {
 //				tiles[x + y * 16].render(x, y, screen);
 			}
 		}
+		
+		for (int i = 0; i < entities.size(); i++) {
+			entities.get(i).render(screen);
+		}
+	}
+	
+	public void add(Entity e) {
+		
 	}
 
 	// Grass = 0x00ff00
