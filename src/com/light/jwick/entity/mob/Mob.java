@@ -30,6 +30,10 @@ public abstract class Mob extends Entity {
 	public void update() {
 	}
 
+	protected void shoot(int x, int y, double dir) {
+		dir *= 180 / Math.PI;
+	}
+	
 	private boolean collision(int xa, int ya) {	// TODO: understand the function based that relies upon collision
 		boolean solid = false;
 		for (int c = 0; c < 4; c++) {

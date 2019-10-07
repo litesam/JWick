@@ -1,8 +1,10 @@
 package com.light.jwick.entity.mob;
 
+import com.light.jwick.Game;
 import com.light.jwick.graphics.Screen;
 import com.light.jwick.graphics.Sprite;
 import com.light.jwick.input.Keyboard;
+import com.light.jwick.input.Mouse;
 
 public class Player extends Mob {
 
@@ -35,29 +37,28 @@ public class Player extends Mob {
 //		if (input.right) x++;
 
 		// Creates a local variable to support updation which is then updated by the mob
-		if (input.up) {
-			ya--;
-			flippy = 0;
-		}
-		if (input.down) {
-			ya++;
-			flippy = 0;
-		}
-		if (input.left) {
-			xa--;
-			flippy = 1;
-		}
-		if (input.right) {
-			xa++;
-			flippy = 0;
-		}
+		if (input.up) ya--;
+		if (input.down) ya++;
+		if (input.left) xa--;
+		if (input.right) xa++;
+		flippy = input.left ? 1: 0; // Making the sprite flip based on X-axis
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
 			walking = true;
 		} else {
 			walking = false;
 		}
-
+		
+		updateShooting();
+	}
+	
+	private void updateShooting() {
+		if (Mouse.getButton() == 1) {
+			double dx = Mouse.getX() - Game.getWindowWidth() / 2;
+			double dy = Mouse.getY() - Game.getWindowHeight() / 2;
+			double dir = Math.atan2(dy, dx);	// TODO: Why the tan(inverse) and not tan!@@!@
+			shoot(x, y, dir);
+		}
 	}
 
 	public void render(Screen screen) {
@@ -78,7 +79,7 @@ public class Player extends Mob {
 		if (dir == 2) {
 			sprite = Sprite.playerBack;
 			if (walking) {
-				if (anim % 20 > 10 ) sprite = Sprite.playerBack1;
+				if (anim % 20 > 10) sprite = Sprite.playerBack1;
 				else sprite = Sprite.playerBack2;
 			}
 		}
