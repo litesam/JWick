@@ -3,7 +3,7 @@ package com.light.jwick.graphics;
 public class Sprite {
 
 	public final int SIZE;
-	private int x, y;
+	private int x, y, width, height;
 	public int[] pixels;
 	private SpriteSheet sheet;
 
@@ -32,32 +32,58 @@ public class Sprite {
 
 	public static Sprite playerForward1 = new Sprite(32, 0, 6, SpriteSheet.tiles);
 	public static Sprite playerForward2 = new Sprite(32, 0, 7, SpriteSheet.tiles);
-	
+
 	public static Sprite playerRight1 = new Sprite(32, 1, 6, SpriteSheet.tiles);
 	public static Sprite playerRight2 = new Sprite(32, 1, 7, SpriteSheet.tiles);
-	
+
 	public static Sprite playerBack1 = new Sprite(32, 2, 6, SpriteSheet.tiles);
 	public static Sprite playerBack2 = new Sprite(32, 2, 7, SpriteSheet.tiles);
 
+//	Projectiles sprites
+	public static Sprite projectileWizard = new Sprite(16, 0, 0, SpriteSheet.projectileWizard);
+	
+	// Particles sprite
+	public static Sprite particleNormal = new Sprite(3, 0xAAAAAA);
+
 	public Sprite(int size, int x, int y, SpriteSheet sheet) {
 		SIZE = size;
-		pixels = new int[SIZE * SIZE];
+		this.width = size;
+		this.height = size;
+		pixels = new int[width * height];
 		this.x = x * SIZE;
 		this.y = y * SIZE;
 		this.sheet = sheet;
 		load();
 	}
 
+	public Sprite(int width, int height, int colour) {
+		SIZE = -1;
+		this.width = width;
+		this.height = height;
+		pixels = new int[width * height];
+		setColour(colour);
+	}
+
 	public Sprite(int size, int colour) {
 		SIZE = size;
-		pixels = new int[SIZE * SIZE];
+		this.width = size;
+		this.height = size;
+		pixels = new int[width * height];
 		setColour(colour);
 	}
 
 	private void setColour(int colour) {
-		for (int i = 0; i < SIZE * SIZE; i++) {
+		for (int i = 0; i < width * height; i++) {
 			pixels[i] = colour;
 		}
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 
 	private void load() {

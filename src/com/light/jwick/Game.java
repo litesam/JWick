@@ -96,11 +96,6 @@ public class Game extends Canvas implements Runnable {
 				updates++;
 				delta--;
 			}
-			try {
-				Thread.sleep(3);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			if (shouldRender) {
 				render();
 				frames++;
@@ -119,6 +114,7 @@ public class Game extends Canvas implements Runnable {
 	public void update() {
 		key.update();
 		player.update();
+		level.update();
 		
 	}
 

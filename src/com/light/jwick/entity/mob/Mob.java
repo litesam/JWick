@@ -1,6 +1,8 @@
 package com.light.jwick.entity.mob;
 
 import com.light.jwick.entity.Entity;
+import com.light.jwick.entity.projectile.Projectile;
+import com.light.jwick.entity.projectile.WizardProjectile;
 import com.light.jwick.graphics.Sprite;
 
 public abstract class Mob extends Entity {
@@ -8,6 +10,9 @@ public abstract class Mob extends Entity {
 	protected Sprite sprite;
 	protected int dir = -1;
 	protected boolean moving = false;
+	protected boolean walking = false;
+	
+//	protected List<Projectile> projectiles = new ArrayList<Projectile>();
 
 	protected void move(int xa, int ya) {
 		if (xa != 0 && ya != 0) {
@@ -25,13 +30,17 @@ public abstract class Mob extends Entity {
 			x += xa;
 			y += ya;
 		}
+//		System.out.println(projectiles.size());
 	}
 
 	public void update() {
 	}
 
 	protected void shoot(int x, int y, double dir) {
-		dir *= 180 / Math.PI;
+//		dir *= 180 / Math.PI;
+		Projectile p = new WizardProjectile(x, y, dir);
+//		projectiles.add(p);
+		level.add(p);
 	}
 	
 	private boolean collision(int xa, int ya) {	// TODO: understand the function based that relies upon collision

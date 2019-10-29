@@ -5,8 +5,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.light.jwick.level.tile.Tile;
-
 public class SpawnLevel extends Level {
 
 //	private int[] tiles;

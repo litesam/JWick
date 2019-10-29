@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.light.jwick.entity.Entity;
+import com.light.jwick.entity.particle.Particle;
+import com.light.jwick.entity.projectile.Projectile;
 import com.light.jwick.graphics.Screen;
 import com.light.jwick.level.tile.Tile;
 
@@ -13,9 +15,11 @@ public class Level {
 	protected int width, height;
 	protected int[] tilesInt;
 	protected int[] tiles;
-	
-	private List<Entity> entities = new ArrayList<Entity>();	// TODO: Major code change going on!!!!!
-	
+
+	private List<Entity> entities = new ArrayList<Entity>(); // TODO: Major code change going on!!!!! (About List here and Mob)
+	public List<Projectile> projectiles = new ArrayList<Projectile>();
+	public List<Particle> particles = new ArrayList<Particle>();
+
 	public static Level spawn = new SpawnLevel("/levels/spawn.png");
 
 	public Level(int width, int height) {
@@ -37,12 +41,39 @@ public class Level {
 	}
 
 	public void update() {
+		for (Entity e : entities)
+			e.update();
+		for (Projectile p : projectiles)
+			p.update();
+		for (Particle p : particles)
+			p.update();
+		remove();
+	}
+
+	private void remove() {
 		for (int i = 0; i < entities.size(); i++) {
-			entities.get(i).update();
+			if (entities.get(i).isRemoved()) entities.remove(i);
+		}
+		for (int i = 0; i < projectiles.size(); i++) {
+			if (projectiles.get(i).isRemoved()) projectiles.remove(i);
+		}
+		for (int i = 0; i < particles.size(); i++) {
+			if (particles.get(i).isRemoved()) particles.remove(i);
 		}
 	}
 
 	private void time() {
+	}
+
+	public boolean tileCollision(double x, double y, double xa, double ya, int size) { // TODO: understand the function based that relies upon collision
+		boolean solid = false;
+		for (int c = 0; c < 4; c++) {
+			int xt = (((int) x + (int) xa) + c % 2 * size / 2 - 5) / 16;
+			int yt = (((int) y + (int) ya) + c / 2 * size / 2 + 5) / 16;
+			if (getTile(xt, yt).solid()) solid = true;
+		}
+//		if (level.getTile((x + xa) / 16, (y + ya) / 16).solid()) solid = true; this is easy method for collision detection, but who cares!
+		return solid;
 	}
 
 	public void render(int xScroll, int yScroll, Screen screen) {
@@ -55,22 +86,26 @@ public class Level {
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
 				getTile(x, y).render(x, y, screen);
-//				if (x < 0 || x >= width || y < 0 || y >= height) Tile.voidTile.render(x, y, screen); 
-//				if (x + y * 16 < 0 || x + y * 16 >= 256) {
-//					Tile.voidTile.render(x, y, screen);
-//					continue;
-//				}
-//				tiles[x + y * 16].render(x, y, screen);
 			}
 		}
-		
-		for (int i = 0; i < entities.size(); i++) {
-			entities.get(i).render(screen);
-		}
+
+		for (Entity e : entities)
+			e.render(screen);
+		for (Projectile p : projectiles)
+			p.render(screen);
+		for (Particle p : particles)
+			p.render(screen);
 	}
-	
+
 	public void add(Entity e) {
-		
+		e.init(this);
+		if (e instanceof Particle) {
+			particles.add((Particle) e);
+		} else if (e instanceof Projectile) {
+			projectiles.add((Projectile) e);
+		} else {
+			entities.add(e);
+		}
 	}
 
 	// Grass = 0x00ff00

@@ -1,6 +1,8 @@
 package com.light.jwick.entity.mob;
 
 import com.light.jwick.Game;
+import com.light.jwick.entity.projectile.Projectile;
+import com.light.jwick.entity.projectile.WizardProjectile;
 import com.light.jwick.graphics.Screen;
 import com.light.jwick.graphics.Sprite;
 import com.light.jwick.input.Keyboard;
@@ -13,6 +15,9 @@ public class Player extends Mob {
 	private short anim = 0;
 	private boolean walking = false;
 	private int flippy = 0;
+	private boolean lastLeftClick = false;
+
+	private int fireRate = 0;
 
 	public Player(Keyboard input) {
 		this.input = input;
@@ -24,9 +29,11 @@ public class Player extends Mob {
 		this.y = y;
 		this.input = input;
 		sprite = Sprite.playerBack;
+		fireRate = WizardProjectile.FIRE_RATE;
 	}
 
 	public void update() {
+		if (fireRate > 0) fireRate--;
 		int xa = 0, ya = 0;
 		if (anim < 7500) anim++;
 		else anim = 0;
@@ -41,23 +48,38 @@ public class Player extends Mob {
 		if (input.down) ya++;
 		if (input.left) xa--;
 		if (input.right) xa++;
-		flippy = input.left ? 1: 0; // Making the sprite flip based on X-axis
+		if (input.left || lastLeftClick) { // Making the sprite flip based on X-axis
+			flippy = 1;
+			lastLeftClick = true;
+		}
+		if (input.up || input.down || input.right) {
+			flippy = 0;
+			lastLeftClick = false;
+		}
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
 			walking = true;
 		} else {
 			walking = false;
 		}
-		
+		clear();
 		updateShooting();
 	}
-	
+
+	private void clear() {
+		for (int i = 0; i < level.projectiles.size(); i++) {
+			Projectile p = level.projectiles.get(i);
+			if (p.isRemoved()) level.projectiles.remove(i);
+		}
+	}
+
 	private void updateShooting() {
-		if (Mouse.getButton() == 1) {
+		if (Mouse.getButton() == 1 && fireRate <= 0) {
 			double dx = Mouse.getX() - Game.getWindowWidth() / 2;
 			double dy = Mouse.getY() - Game.getWindowHeight() / 2;
-			double dir = Math.atan2(dy, dx);	// TODO: Why the tan(inverse) and not tan!@@!@
+			double dir = Math.atan2(dy, dx); // TODO: Why the tan(inverse) and not tan!@@!@
 			shoot(x, y, dir);
+			fireRate = WizardProjectile.FIRE_RATE;
 		}
 	}
 
