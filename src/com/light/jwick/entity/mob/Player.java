@@ -3,8 +3,10 @@ package com.light.jwick.entity.mob;
 import com.light.jwick.Game;
 import com.light.jwick.entity.projectile.Projectile;
 import com.light.jwick.entity.projectile.WizardProjectile;
+import com.light.jwick.graphics.AnimatedSprite;
 import com.light.jwick.graphics.Screen;
 import com.light.jwick.graphics.Sprite;
+import com.light.jwick.graphics.SpriteSheet;
 import com.light.jwick.input.Keyboard;
 import com.light.jwick.input.Mouse;
 
@@ -16,12 +18,19 @@ public class Player extends Mob {
 	private boolean walking = false;
 	private int flippy = 0;
 	private boolean lastLeftClick = false;
+	private AnimatedSprite down = new AnimatedSprite(SpriteSheet.playerDown, 32, 32, 3);
+	private AnimatedSprite up = new AnimatedSprite(SpriteSheet.playerUp, 32, 32, 3);
+	private AnimatedSprite left = new AnimatedSprite(SpriteSheet.playerLeft, 32, 32, 3);
+	private AnimatedSprite right = new AnimatedSprite(SpriteSheet.playerRight, 32, 32, 3);
+	
+	private AnimatedSprite animSprite = null;
 
 	private int fireRate = 0;
 
 	public Player(Keyboard input) {
 		this.input = input;
 		sprite = Sprite.playerBack;
+		animSprite = down;
 	}
 
 	public Player(int x, int y, Keyboard input) {
@@ -29,13 +38,16 @@ public class Player extends Mob {
 		this.y = y;
 		this.input = input;
 		sprite = Sprite.playerBack;
+		animSprite = down;
 		fireRate = WizardProjectile.FIRE_RATE;
 	}
 
 	public void update() {
+		if (walking) animSprite.update();
+		else animSprite.setFrame(0);
 		if (fireRate > 0) fireRate--;
 		int xa = 0, ya = 0;
-		if (anim < 7500) anim++;
+		if (anim < 9500) anim++;
 		else anim = 0;
 		// Updates the player straightly
 //		if (input.up) y--;
@@ -44,18 +56,30 @@ public class Player extends Mob {
 //		if (input.right) x++;
 
 		// Creates a local variable to support updation which is then updated by the mob
-		if (input.up) ya--;
-		if (input.down) ya++;
-		if (input.left) xa--;
-		if (input.right) xa++;
-		if (input.left || lastLeftClick) { // Making the sprite flip based on X-axis
-			flippy = 1;
-			lastLeftClick = true;
+		if (input.up) {
+			ya--;
+			animSprite = up;
 		}
-		if (input.up || input.down || input.right) {
-			flippy = 0;
-			lastLeftClick = false;
+		if (input.down) {
+			ya++;
+			animSprite = down;
 		}
+		if (input.left) {
+			xa--;
+			animSprite = left;
+		}
+		if (input.right) {
+			xa++;
+			animSprite = right;
+		}
+//		if (input.left || lastLeftClick) { // Making the sprite flip based on X-axis
+//			flippy = 1;
+//			lastLeftClick = true;
+//		}
+//		if (input.up || input.down || input.right) {
+//			flippy = 0;
+//			lastLeftClick = false;
+//		}
 		if (xa != 0 || ya != 0) {
 			move(xa, ya);
 			walking = true;
@@ -105,7 +129,8 @@ public class Player extends Mob {
 				else sprite = Sprite.playerBack2;
 			}
 		}
-		screen.renderPlayer(x - 16, y - 16, flippy, sprite);
+		sprite = animSprite.getSprite();
+		screen.renderMob(x - 16, y - 16, flippy, sprite);
 //		screen.renderPlayer(xx + 16, yy, Sprite.player1);
 //		screen.renderPlayer(xx, yy + 16, Sprite.player2);
 //		screen.renderPlayer(xx + 16, yy + 16, Sprite.player3);

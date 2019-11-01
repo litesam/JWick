@@ -11,13 +11,14 @@ import javax.swing.JFrame;
 
 import com.light.jwick.entity.mob.Player;
 import com.light.jwick.graphics.Screen;
+import com.light.jwick.graphics.SpriteSheet;
 import com.light.jwick.input.Keyboard;
 import com.light.jwick.input.Mouse;
 import com.light.jwick.level.Level;
 import com.light.jwick.level.TileCoordinate;
 
 public class Game extends Canvas implements Runnable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private static int width = 300;
@@ -54,11 +55,11 @@ public class Game extends Canvas implements Runnable {
 		addMouseListener(mouse);
 		addMouseMotionListener(mouse);
 	}
-	
+
 	public static int getWindowWidth() {
 		return width * scale;
 	}
-	
+
 	public static int getWindowHeight() {
 		return height * scale;
 	}
@@ -85,7 +86,6 @@ public class Game extends Canvas implements Runnable {
 		double delta = 0;
 		int frames = 0; // FPS (Frames Per Second)
 		int updates = 0; // UPS (Updates Per Second)
-		boolean shouldRender = true;
 		requestFocus();
 		while (running) {
 			long now = System.nanoTime();
@@ -96,10 +96,8 @@ public class Game extends Canvas implements Runnable {
 				updates++;
 				delta--;
 			}
-			if (shouldRender) {
-				render();
-				frames++;
-			}
+			render();
+			frames++;
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
 				System.out.println(updates + " ticks, " + frames + " fps");
@@ -115,7 +113,7 @@ public class Game extends Canvas implements Runnable {
 		key.update();
 		player.update();
 		level.update();
-		
+
 	}
 
 	public void render() {
@@ -130,6 +128,7 @@ public class Game extends Canvas implements Runnable {
 		int yScroll = player.y - screen.height / 2;
 		level.render(xScroll, yScroll, screen);
 		player.render(screen);
+//		screen.renderSheet(40, 40, SpriteSheet.playerDown, false);
 
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];

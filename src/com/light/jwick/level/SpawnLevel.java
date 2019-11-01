@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.light.jwick.entity.mob.Dummy;
+
 public class SpawnLevel extends Level {
 
 //	private int[] tiles;
@@ -25,6 +27,7 @@ public class SpawnLevel extends Level {
 			e.printStackTrace();
 			System.out.println("Exception! could not load level file!");
 		}
+		add(new Dummy(20, 55));
 	}
 
 	// Grass = 0x00ff00

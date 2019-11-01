@@ -3,6 +3,7 @@ package com.light.jwick.entity.mob;
 import com.light.jwick.entity.Entity;
 import com.light.jwick.entity.projectile.Projectile;
 import com.light.jwick.entity.projectile.WizardProjectile;
+import com.light.jwick.graphics.Screen;
 import com.light.jwick.graphics.Sprite;
 
 public abstract class Mob extends Entity {
@@ -33,8 +34,9 @@ public abstract class Mob extends Entity {
 //		System.out.println(projectiles.size());
 	}
 
-	public void update() {
-	}
+	public abstract void update();
+		
+	public abstract void render(Screen screen);
 
 	protected void shoot(int x, int y, double dir) {
 //		dir *= 180 / Math.PI;
@@ -54,7 +56,5 @@ public abstract class Mob extends Entity {
 		return solid;
 	}
 
-	public void render() {
-	}
 
 }
